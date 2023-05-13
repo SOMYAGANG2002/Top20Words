@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from 'recharts';
 import { Button } from 'react-bootstrap';
 
-const WordFrequencyCounter = () => {
+const Top20Words = () => {
   const [wordFrequency, setWordFrequency] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -43,25 +43,24 @@ const WordFrequencyCounter = () => {
 
   return (
     <div>
-      <Button className="mt-3" variant="primary" onClick={fetchData} disabled={isLoading}>
+      <Button className="mt-2" variant="primary" onClick={fetchData} disabled={isLoading}>
         {isLoading ? 'Loading...' : 'Submit'}
       </Button>
       {wordFrequency.length > 0 && (
         <div>
-          <h2 className="mt-3">Top 20 Words</h2>
-          <BarChart width={1000} height={500} data={wordFrequency}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="word" />
-            <YAxis />
-            <Tooltip />
+          <h2 className="mt-4 mb-3">Top 20 Words</h2>
+          <BarChart width={900} height={450} data={wordFrequency} style={{background:"black", boxShadow:"0 3px 20px rgba(0, 0, 0, 1)"}}>
+            <XAxis dataKey="word" tick={{ fill: 'white' }}/>
+            <YAxis tick={{ fill: 'white' }}/>
+            <Tooltip/>
             <Legend />
-            <Bar dataKey="frequency" fill="#0cc2f5" />
+            <Bar dataKey="frequency"  fill="#0cc2f5" />
           </BarChart>
-          <Button variant="danger" onClick={handleExport}>Export</Button>
+          <Button className="mt-4" variant="danger" onClick={handleExport}>Export</Button>
         </div>
       )}
     </div>
   );
 };
 
-export default WordFrequencyCounter;
+export default Top20Words;
