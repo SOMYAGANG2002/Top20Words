@@ -53,20 +53,29 @@ const Top20Words = () => {
         <div>
           <h2 className="mt-4 mb-3">Top 20 Words</h2>
           <Chart
-            width={'800px'}
+            width={'1100px'}
             height={'450px'}
-            style={{ boxShadow:"0 3px 20px rgba(0, 0, 0, 0.5)"}}
+            style={{ boxShadow: "0 3px 20px rgba(0, 0, 0, 0.5)" }}
             chartType="Histogram"
             data={wordFrequency}
             options={{
               title: 'Top 20 Words',
+              titleTextStyle:{color: '#c8c7c7'},
               legend: { position: 'none' },
               hAxis: {
                 title: 'Words',
+                textStyle:{color: '#c8c7c7'},
+                titleTextStyle:{color: '#c8c7c7'},
               },
               vAxis: {
                 title: 'Frequency',
-                minValue: 0,
+                textStyle: {color: '#c8c7c7'},
+                titleTextStyle:{color: '#c8c7c7'},
+              },
+              backgroundColor: "#0d1117",
+              colors: ['blue'], 
+              histogram: {
+                bucketSize: 1,
               },
             }}
           />
