@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from 'recharts';
+import { Chart } from 'react-google-charts';
 import { Button } from 'react-bootstrap';
 
 const Top20Words = () => {
@@ -12,19 +12,22 @@ const Top20Words = () => {
     try {
       const response = await axios.get('https://www.terriblytinytales.com/test.txt');
       const text = response.data;
-
       const words = text.split(/\s+/);
       const wordCount = {};
       words.forEach(word => {
         wordCount[word] = (wordCount[word] || 0) + 1;
       });
 
-      const wordFrequencyData = Object.entries(wordCount)
+      const sortedWords = Object.entries(wordCount)
         .sort((a, b) => b[1] - a[1])
-        .slice(0, 20)
-        .map(([word, frequency]) => ({ word, frequency }));
+        .slice(0, 20);
 
-      setWordFrequency(wordFrequencyData);
+      const histogramData = [['Word', 'Frequency']];
+      sortedWords.forEach(([word, frequency]) => {
+        histogramData.push([word, frequency]);
+      });
+
+      setWordFrequency(histogramData);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -32,7 +35,7 @@ const Top20Words = () => {
   };
 
   const handleExport = () => {
-    const csvContent = 'data:text/csv;charset=utf-8,' + wordFrequency.map(item => `${item.word},${item.frequency}`).join('\n');
+    const csvContent = 'data:text/csv;charset=utf-8,' + wordFrequency.map(row => row.join(',')).join('\n');
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement('a');
     link.setAttribute('href', encodedUri);
@@ -43,22 +46,33 @@ const Top20Words = () => {
 
   return (
     <div>
-      <Button className="mt-2" variant="primary" onClick={fetchData} disabled={isLoading}>
+      <Button className="mt-2 btn btn-primary" onClick={fetchData} disabled={isLoading}>
         {isLoading ? 'Loading...' : 'Submit'}
       </Button>
-      {wordFrequency.length > 0 && (
+      {wordFrequency.length > 0 ? (
         <div>
           <h2 className="mt-4 mb-3">Top 20 Words</h2>
-          <BarChart width={900} height={450} data={wordFrequency} style={{background:"black", boxShadow:"0 3px 20px rgba(0, 0, 0, 1)"}}>
-            <XAxis dataKey="word" tick={{ fill: 'white' }}/>
-            <YAxis tick={{ fill: 'white' }}/>
-            <Tooltip/>
-            <Legend />
-            <Bar dataKey="frequency"  fill="#0cc2f5" />
-          </BarChart>
-          <Button className="mt-4" variant="danger" onClick={handleExport}>Export</Button>
+          <Chart
+            width={'800px'}
+            height={'450px'}
+            style={{ boxShadow:"0 3px 20px rgba(0, 0, 0, 0.5)"}}
+            chartType="Histogram"
+            data={wordFrequency}
+            options={{
+              title: 'Top 20 Words',
+              legend: { position: 'none' },
+              hAxis: {
+                title: 'Words',
+              },
+              vAxis: {
+                title: 'Frequency',
+                minValue: 0,
+              },
+            }}
+          />
+          <Button className="mt-4 btn btn-success" onClick={handleExport}>Export To CSV</Button>
         </div>
-      )}
+      ) : null}
     </div>
   );
 };
