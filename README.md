@@ -9,9 +9,9 @@ Finding Top 20 most occuring words!
 2) In src folder in 'App.js' we will make a div conatiner and give h1 heading inside it. We will create a new component named as 'Top20Words.jsx' and we will load this component in  App.js below h1 tag.
 
 3) Now we will install '3 Libraries' for our task ->
-   a) - axios               - (for requesting data from an API)
-   b) - react-google-charts - (for ploting charts)
-   c) - react-bootstrap     - (for css)
+   (a) axios for requesting data from an API,
+   (b) react-google-charts for ploting charts,
+   (c) react-bootstrap for css.
 
 4) Now in Top20Words.jsx we will create a 'Submit' button (using bootstrap) and give it an 'onclick' event to fetch our data from 'https://www.terriblytinytales.com/test.txt' (axios library will work here to make a HTTP GET request to get the data from the url).
 
